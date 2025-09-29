@@ -3,7 +3,6 @@
 <head>
   <title>Rates Checker</title>
   <style>
-   
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       background: #f7f9fc;
@@ -28,7 +27,7 @@
       font-weight: bold;
       color: #444;
     }
-    input {
+    input, select {
       width: 100%;
       padding: 10px;
       margin-top: 4px;
@@ -49,12 +48,12 @@
     button:hover {
       background-color: #0056b3;
     }
-    pre {
+    .result {
       background: #f0f0f0;
       padding: 15px;
       margin-top: 20px;
       border-radius: 4px;
-      overflow-x: auto;
+      white-space: pre-line;
     }
   </style>
 </head>
@@ -64,7 +63,10 @@
     <form id="rateForm">
       <!-- Form fields -->
       <label>Unit Name:
-        <input name="unitName" required />
+        <select name="unitName" required>
+          <option value="Standard Unit">Standard Unit</option>
+          <option value="Luxury Unit">Luxury Unit</option>
+        </select>
       </label>
       <label>Arrival (dd/mm/yyyy):
         <input name="arrival" required />
@@ -82,7 +84,7 @@
     </form>
 
     <!-- Response will be displayed here -->
-    <pre id="output"></pre>
+    <div id="output" class="result"></div>
   </div>
 
   <script>
@@ -91,7 +93,7 @@
     const output = document.getElementById('output');
 
     form.addEventListener('submit', async (e) => {
-      e.preventDefault(); // Prevent page reload
+      e.preventDefault();
 
       // Collect form data
       const data = new FormData(form);
@@ -111,9 +113,22 @@
           body: JSON.stringify(payload)
         });
 
-        // Display result in <pre> block
         const json = await res.json();
-        output.textContent = JSON.stringify(json, null, 2);
+
+        if (json.error) {
+          output.textContent = "Error: " + json.error;
+        } else {
+          const unitName = json.unit;
+          const dateRange = json.date_range;
+          const availability = json.rate_response?.Availability ?? "N/A";
+          const rate = json.rate_response?.Rate ?? "N/A";
+
+          output.textContent =
+            `Unit: ${unitName}\n` +
+            `Date Range: ${dateRange}\n` +
+            `Rate: ${rate}\n` +
+            `Availability: ${availability}`;
+        }
       } catch (error) {
         output.textContent = "Error contacting the API: " + error;
       }

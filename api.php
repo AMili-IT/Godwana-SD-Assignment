@@ -1,4 +1,4 @@
-<?php
+<?php 
 // Set headers to accept JSON and allow POST from any origin
 header("Content-Type: application/json");
 header("Access-Control-Allow-Origin: *");
@@ -15,7 +15,7 @@ $input = file_get_contents("php://input");
 $data = json_decode($input, true);
 
 // Check for required fields
-if (!$data || !isset($data["Ages"], $data["Arrival"], $data["Departure"])) {
+if (!$data || !isset($data["Unit Name"], $data["Ages"], $data["Arrival"], $data["Departure"])) {
     echo json_encode(["error" => "Invalid input."]);
     exit;
 }
@@ -26,9 +26,17 @@ function convertDate($date) {
     return $d ? $d->format('Y-m-d') : null;
 }
 
+// Map Unit Name to Unit Type ID
+$unitMap = [
+    "Standard Unit" => -2147483637,
+    "Luxury Unit"   => -2147483456
+];
+
+$unitTypeId = $unitMap[$data["Unit Name"]] ?? -2147483637;
+
 // Prepare payload to send to remote API
 $convertedPayload = [
-    "Unit Type ID" => -2147483637, // Using test Unit Type ID
+    "Unit Type ID" => $unitTypeId,
     "Arrival" => convertDate($data["Arrival"]),
     "Departure" => convertDate($data["Departure"]),
     "Guests" => []
