@@ -1,0 +1,39 @@
+name: SonarCloud
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    name: Build and Analyze
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'  # or whichever version you use
+
+      - name: Install SonarCloud Scanner
+        run: |
+          curl -sSLo sonar-scanner.zip https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.9.3.727-linux.zip
+          unzip sonar-scanner.zip
+          export PATH="$PWD/sonar-scanner-4.9.3.727-linux/bin:$PATH"
+
+      - name: Run SonarCloud Analysis
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: |
+          sonar-scanner \
+            -Dsonar.projectKey=YOUR_PROJECT_KEY \
+            -Dsonar.organization=YOUR_ORG \
+            -Dsonar.sources=. \
+            -Dsonar.host.url=https://sonarcloud.io
