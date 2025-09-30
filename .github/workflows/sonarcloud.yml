@@ -1,20 +1,17 @@
-name: SonarCloud
+name: SonarCloud QA Check
 
 on:
-  push:
-    branches:
-      - main
   pull_request:
     branches:
       - main
 
 jobs:
-  build:
-    name: Build and Analyze
+  sonarcloud:
+    name: SonarCloud QA
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      - name: Checkout repository
         uses: actions/checkout@v4
 
       - name: Set up PHP
@@ -22,7 +19,7 @@ jobs:
         with:
           php-version: '8.2'
 
-      - name: SonarCloud Scan
+      - name: SonarCloud Scan (Automatic Analysis Compatible)
         uses: SonarSource/sonarqube-scan-action@v5.0.0
         with:
           args: >
@@ -30,5 +27,6 @@ jobs:
             -Dsonar.organization=amili-it
             -Dsonar.sources=.
             -Dsonar.host.url=https://sonarcloud.io
+            -Dsonar.ci.build=true
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
