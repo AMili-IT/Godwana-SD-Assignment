@@ -33,7 +33,7 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
           sonar-scanner \
-            -Dsonar.projectKey=godwana-sd-assignment \
-            -Dsonar.organization=amili-it \
+            -Dsonar.projectKey=AMili-IT_Godwana-SD-Assignment\
+            -Dsonar.organization=amili-it\
             -Dsonar.sources=. \
             -Dsonar.host.url=https://sonarcloud.io
