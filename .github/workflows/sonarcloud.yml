@@ -25,6 +25,6 @@ jobs:
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
         with:
-          organization: amili-it      
+          organization: amili-it                   # your organization key
+          projectKey: AMili-IT_Godwana-SD-Assignment  # your project key
           token: ${{ secrets.SONAR_TOKEN }}
-          projectKey: AMili-IT_Godwana-SD-Assignment
