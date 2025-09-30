@@ -1,11 +1,12 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8">
   <title>Rates Checker</title>
   <style>
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: #f7f9fc;
+      background: #fdf9f3; /* soft sand */
       margin: 0;
       padding: 20px;
     }
@@ -13,13 +14,15 @@
       max-width: 500px;
       margin: auto;
       background: #ffffff;
-      border-radius: 8px;
+      border-radius: 10px;
       padding: 30px;
-      box-shadow: 0 0 15px rgba(0,0,0,0.1);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+      border-top: 6px solid #d96c06; /* Gondwana warm orange */
     }
     h2 {
       text-align: center;
-      color: #333;
+      color: #2e5d34; /* Gondwana deep green */
+      margin-bottom: 25px;
     }
     label {
       display: block;
@@ -27,33 +30,39 @@
       font-weight: bold;
       color: #444;
     }
-    input, select {
+    input {
       width: 100%;
       padding: 10px;
       margin-top: 4px;
       margin-bottom: 15px;
       border: 1px solid #ccc;
-      border-radius: 4px;
+      border-radius: 5px;
+      background-color: #f9f9f9;
     }
     button {
       width: 100%;
-      background-color: #007bff;
+      background-color: #d96c06; /* Gondwana orange */
       color: white;
       border: none;
       padding: 12px;
       font-size: 16px;
-      border-radius: 4px;
+      font-weight: bold;
+      border-radius: 5px;
       cursor: pointer;
+      transition: 0.3s ease;
     }
     button:hover {
-      background-color: #0056b3;
+      background-color: #a34f04; /* darker orange */
     }
     .result {
-      background: #f0f0f0;
+      background: #f4f9f4; /* pale green */
       padding: 15px;
       margin-top: 20px;
-      border-radius: 4px;
+      border-radius: 5px;
+      border: 1px solid #cde2cd;
       white-space: pre-line;
+      font-size: 14px;
+      color: #333;
     }
   </style>
 </head>
@@ -63,10 +72,7 @@
     <form id="rateForm">
       <!-- Form fields -->
       <label>Unit Name:
-        <select name="unitName" required>
-          <option value="Standard Unit">Standard Unit</option>
-          <option value="Luxury Unit">Luxury Unit</option>
-        </select>
+        <input name="unitName" required />
       </label>
       <label>Arrival (dd/mm/yyyy):
         <input name="arrival" required />
@@ -93,7 +99,7 @@
     const output = document.getElementById('output');
 
     form.addEventListener('submit', async (e) => {
-      e.preventDefault();
+      e.preventDefault(); // stop page reload
 
       // Collect form data
       const data = new FormData(form);
@@ -136,3 +142,4 @@
   </script>
 </body>
 </html>
+```

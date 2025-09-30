@@ -15,7 +15,7 @@ $input = file_get_contents("php://input");
 $data = json_decode($input, true);
 
 // Check for required fields
-if (!$data || !isset($data["Unit Name"], $data["Ages"], $data["Arrival"], $data["Departure"])) {
+if (!$data || !isset($data["Ages"], $data["Arrival"], $data["Departure"], $data["Unit Name"])) {
     echo json_encode(["error" => "Invalid input."]);
     exit;
 }
@@ -26,13 +26,17 @@ function convertDate($date) {
     return $d ? $d->format('Y-m-d') : null;
 }
 
-// Map Unit Name to Unit Type ID
-$unitMap = [
+// Map Unit Names to Unit Type IDs
+$unitMapping = [
     "Standard Unit" => -2147483637,
-    "Luxury Unit"   => -2147483456
+    "Luxury Unit"   => -2147483456,
+    "Family Room"   => -2147483000,
+    "Bush Chalet"   => -2147483200,
 ];
 
-$unitTypeId = $unitMap[$data["Unit Name"]] ?? -2147483637;
+// Default to Standard if no match
+$unitName = $data["Unit Name"];
+$unitTypeId = $unitMapping[$unitName] ?? -2147483637;
 
 // Prepare payload to send to remote API
 $convertedPayload = [
@@ -67,7 +71,7 @@ if ($response === false) {
     $responseData = json_decode($response, true);
     echo json_encode([
         "message" => "Rates fetched successfully",
-        "unit" => $data["Unit Name"],
+        "unit" => $unitName,
         "date_range" => $data["Arrival"] . " to " . $data["Departure"],
         "rate_response" => $responseData
     ]);
